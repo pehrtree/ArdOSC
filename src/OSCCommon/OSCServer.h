@@ -2,7 +2,7 @@
  
  ArdOSC 2.1 - OSC Library for Arduino.
  
- -------- Lisence -----------------------------------------------------------
+ -------- licence -----------------------------------------------------------
  
  ArdOSC
  
@@ -25,7 +25,7 @@ private:
     int16_t _sock;
     uint16_t _port;
     
-	uint8_t _rcvData[kMaxRecieveData];
+	uint8_t _rcvData[kMaxreceiveData];
 	
 
     OSCDecoder _decoder;
@@ -41,10 +41,10 @@ public:
     OSCServer(void);
 	~OSCServer(void);
     
-	int16_t begin(uint16_t _recievePort);
+	int16_t begin(uint16_t _receivePort);
 	void stop(void);
 	
-    int16_t aviableCheck(void);
+    int16_t availableCheck(void);
 
     //_adr osc address string pointer - "/ard/aaa"
     //_func callback function pointer

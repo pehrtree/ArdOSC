@@ -2,7 +2,7 @@
  
  ArdOSC 2.1 - OSC Library for Arduino.
  
- -------- Lisence -----------------------------------------------------------
+ -------- licence -----------------------------------------------------------
  
  ArdOSC
  
@@ -31,7 +31,7 @@ OSCServer::~OSCServer(void){
      
 }
 
-int16_t OSCServer::begin(uint16_t _recievePort){
+int16_t OSCServer::begin(uint16_t _receivePort){
     
 	if ( _sock != MAX_SOCK_NUM ) return -1;
     
@@ -45,7 +45,7 @@ int16_t OSCServer::begin(uint16_t _recievePort){
     
     if (_sock == MAX_SOCK_NUM) return -1;
     
-    _port=_recievePort;
+    _port=_receivePort;
     
 	if( socket( _sock , SnMR::UDP , _port, 0 ) ) return -1;
     
@@ -64,14 +64,14 @@ void OSCServer::stop(void){
     
 }
 
-int16_t OSCServer::aviableCheck(void){
+int16_t OSCServer::availableCheck(void){
 
 	if( !( W5100.readSnIR(_sock) && SnIR::RECV ) ) return -1;
     if( W5100.getRXReceivedSize(_sock) == 0 ) return -1;
     
     OSCMessage rcvMes;
     
-    if ( recvfrom( _sock , _rcvData , 1 , rcvMes._ip , &rcvMes._port ) > kMaxRecieveData ) return -1;
+    if ( recvfrom( _sock , _rcvData , 1 , rcvMes._ip , &rcvMes._port ) > kMaxreceiveData ) return -1;
     
 	if( _decoder.decode( &rcvMes ,_rcvData ) < 0 ) return -1;
     

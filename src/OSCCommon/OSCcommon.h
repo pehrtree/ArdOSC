@@ -2,7 +2,7 @@
  
  ArdOSC 2.1 - OSC Library for Arduino.
  
- -------- Lisence -----------------------------------------------------------
+ -------- licence -----------------------------------------------------------
  
  ArdOSC
  
@@ -22,7 +22,7 @@ extern "C" {
 }
 
 #define kMaxArgument	16
-#define kMaxRecieveData	100
+#define kMaxreceiveData	100
 #define kMaxOSCAdrCharactor	255
 
 #define CULC_ALIGNMENT(x) (x+4)&0xfffc
