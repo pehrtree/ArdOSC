@@ -14,8 +14,8 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "OSCcommon/OSCServer.h"
-#include "OSCcommon/OSCcommon.h"
+#include "OSCCommon/OSCServer.h"
+#include "OSCCommon/OSCcommon.h"
 #include "OSCCommon/OSCMessage.h"
 
 #include "OSCCommon/Pattern.h"

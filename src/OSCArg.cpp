@@ -12,7 +12,7 @@
  
  */
 
-#include "OSCcommon/OSCArg.h"
+#include "OSCCommon/OSCArg.h"
 #include "OSCCommon/OSCMessage.h"
 #include <stdlib.h>
 #include <string.h>

@@ -15,9 +15,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "OSCcommon/OSCcommon.h"
-#include "OSCcommon/OSCDecoder.h"
-#include "OSCcommon/OSCArg.h"
+#include "OSCCommon/OSCcommon.h"
+#include "OSCCommon/OSCDecoder.h"
+#include "OSCCommon/OSCArg.h"
 
 
 int16_t OSCDecoder::decode( OSCMessage *_newMes , const uint8_t *_binData ){
