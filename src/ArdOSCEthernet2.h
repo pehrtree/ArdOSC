@@ -4,10 +4,13 @@
  
  This library works with arduino firmware0018.
  
+ 2017/02/19 version 3.0 rename to 'ArdOSC2' 
+    to indicate that it works with Ethernet2 for W5500 shields and Arduino Leonardo
  2010/02/01 version 2.0 changed Project OSCClass -> ArdOSC
  2009/03/22 version 1.0.1 add errror process。change Doc.
  2009/03/21 version 1.0.0
  
+
  
  -------- licence -----------------------------------------------------------
  

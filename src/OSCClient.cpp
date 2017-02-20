@@ -18,47 +18,17 @@
 
 #include "OSCCommon/OSCClient.h"
 
-#include <utility/socket.h>
-#include <utility/w5100.h>
+#include <Ethernet2.h>
+
 
 
 OSCClient::OSCClient(void){
-    _sock = MAX_SOCK_NUM;   
 }
 
 OSCClient::~OSCClient(void){
     flushSendData();
 }
 
-
-int16_t OSCClient::sockOpen(void){
-
-    if ( _sock != MAX_SOCK_NUM ) return -1;
-    
-    for ( int i = 0 ; i < MAX_SOCK_NUM ; i++ ) {
-        uint8_t s = W5100.readSnSR(i);
-        if ( s == SnSR::CLOSED || s == SnSR::FIN_WAIT ) {
-            _sock = i;
-            break;
-        }
-    }
-    
-    if ( _sock == MAX_SOCK_NUM ) return -1;
-    
-	socket( _sock, SnMR::UDP , kDummyPortNumber , 0 );
-
-    return 1;
-}
-
-void OSCClient::sockClose(void){
-    
-    if ( _sock == MAX_SOCK_NUM ) return;
-    
-    close(_sock);
-    
-    _sock = MAX_SOCK_NUM;
-
-}
 
 
 
@@ -76,17 +46,15 @@ int16_t OSCClient::send(OSCMessage *_message){
 		return -1;
 	}
     
-    
-    if( sockOpen()<0 ) return -1; //socket open check
+  // Grab a fresh socket
+    _udp.begin(kDummyPortNumber+random(100));
 
-
-    result = sendto( _sock , _sendData , _message->getMessageSize() , _message->getIpAddress(), _message->getPortNumber() );
- 
-	sockClose();
-    
+    _udp.beginPacket(_message->getIpAddress(), _message->getPortNumber());
+    _udp.write(_sendData, _message->getMessageSize());
+    _udp.endPacket();
+    _udp.stop(); // close the socket
     flushSendData();
-
-	return result;
+	return 0;
     
 }
 

@@ -18,37 +18,25 @@
 #include "OSCCommon/OSCcommon.h"
 #include "OSCCommon/OSCMessage.h"
 
-#include <utility/socket.h>
-#include <utility/w5100.h>
-
 
 OSCServer::OSCServer(void){
-    _sock = MAX_SOCK_NUM;
+
 }
 
 OSCServer::~OSCServer(void){
-    stop();
+    udp.stop();
      
 }
 
 int16_t OSCServer::begin(uint16_t _receivePort){
-    
-	if ( _sock != MAX_SOCK_NUM ) return -1;
-    
-    for (int i = 0 ; i < MAX_SOCK_NUM ; i++) {
-        uint8_t s = W5100.readSnSR(i);
-        if ( s == SnSR::CLOSED || s == SnSR::FIN_WAIT ) {
-            _sock = i;
-            break;
-        }
-    }
-    
-    if (_sock == MAX_SOCK_NUM) return -1;
-    
+    int result = udp.begin(_receivePort);
+
+    if(!result){
+    return result;
+    }//no socket avail
+
     _port=_receivePort;
-    
-	if( socket( _sock , SnMR::UDP , _port, 0 ) ) return -1;
-    
+        
 	rcvFlush();
 	
     return 1;
@@ -57,41 +45,47 @@ int16_t OSCServer::begin(uint16_t _receivePort){
 
 
 void OSCServer::stop(void){
-
-    if (_sock == MAX_SOCK_NUM) return;
-    close(_sock);
-    _sock = MAX_SOCK_NUM;
-    
+    udp.stop();
 }
 
 int16_t OSCServer::availableCheck(void){
+    int num=udp.parsePacket();
 
-	if( !( W5100.readSnIR(_sock) && SnIR::RECV ) ) return -1;
-    if( W5100.getRXReceivedSize(_sock) == 0 ) return -1;
-    
+    if(num <=0){return 0;}
+
+    udp.read(_rcvData, kMaxreceiveData);
+
     OSCMessage rcvMes;
+
+    _decoder.decode( &rcvMes ,_rcvData );
+
+    // set IP and port after decoding.
+    IPAddress ip = udp.remoteIP();
+    // manually copy the IPAddress bytes
+    for(int i=0; i <4; i++){
+        rcvMes._ip[i]=ip[i];
+    }
+    rcvMes._port = udp.remotePort();
+
+    if(!_adrMatch.paternComp(&rcvMes)){
+        // nothing matched, not even the default handler.
+    } // call the callbacks
     
-    if ( recvfrom( _sock , _rcvData , 1 , rcvMes._ip , &rcvMes._port ) > kMaxreceiveData ) return -1;
-    
-	if( _decoder.decode( &rcvMes ,_rcvData ) < 0 ) return -1;
-    
-    _adrMatch.paternComp(&rcvMes);
-	    
 	return 1;
 }
 
 
 
 void OSCServer::rcvFlush(void){
-    
-	uint8_t byte;
-    
-    while ( W5100.getRXReceivedSize(_sock) ) recv( _sock , &byte , 1);
-    
+    udp.flush();
 }
 
 
 void OSCServer::addCallback(char *_adr , Pattern::AdrFunc _func ){
+    _adrMatch.addOscAddress( _adr , _func );
+}
+void OSCServer::addDefaultCallback(Pattern::AdrFunc _func ){
+    char * _adr = ""; // convention - blank means default
     _adrMatch.addOscAddress( _adr , _func );
 }
 

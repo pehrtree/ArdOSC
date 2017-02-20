@@ -18,11 +18,13 @@
 
 #include "OSCDecoder.h"
 #include "Pattern.h"
+#include <Ethernet2.h>
+#include <EthernetUDP2.h>
 
 class OSCServer{
     
 private:
-    int16_t _sock;
+    EthernetUDP udp;
     uint16_t _port;
     
 	uint8_t _rcvData[kMaxreceiveData];
@@ -49,6 +51,7 @@ public:
     //_adr osc address string pointer - "/ard/aaa"
     //_func callback function pointer
     void addCallback(char *_adr , Pattern::AdrFunc _func );
+    void addDefaultCallback(Pattern::AdrFunc _func );
 
 };
 

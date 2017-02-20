@@ -24,12 +24,18 @@
 
 Pattern::Pattern(){
     patternNum=0;
+    defaultAdrFunc=NULL;
 
 }
 Pattern::~Pattern(){    
 }
 
 void Pattern::addOscAddress(char *_adr ,  AdrFunc _func){
+    if(strlen(_adr)==0){
+        // blank means default - exec'd when no other handler matches.
+        defaultAdrFunc=_func;
+        return;
+    }
     adrFunc[patternNum] = _func;
     addr[patternNum] = _adr;
     patternNum++;
@@ -39,10 +45,21 @@ void Pattern::execFunc(uint8_t _index,OSCMessage *_mes){
     adrFunc[_index](_mes);
 }
 
-void Pattern::paternComp(OSCMessage *_mes){
+int Pattern::paternComp(OSCMessage *_mes){
     
     for (uint8_t i=0 ; i<patternNum ; i++) {
-        if ( strcmp( addr[i] , _mes->_oscAddress ) == 0 ) execFunc( i , _mes );
+      //
+        if ( strcmp( addr[i] , _mes->_oscAddress ) == 0 ){
+            execFunc( i , _mes ); 
+            return 1;
+          }
 
     }
+
+    if(defaultAdrFunc){
+        defaultAdrFunc(_mes);
+        return 1; // did something
+    }
+
+    return 0;// nothing matched
 }

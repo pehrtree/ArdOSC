@@ -1,7 +1,7 @@
 #include <SPI.h>
-#include <Ethernet.h>
+#include <Ethernet2.h>
 
-#include <ArdOSC.h>
+#include <ArdOSC2.h>
 
 byte myMac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 byte myIp[]  = { 192, 168, 0, 177 }; 

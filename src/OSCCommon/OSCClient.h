@@ -19,6 +19,7 @@
 #include "OSCcommon.h"
 #include "OSCMessage.h"
 #include "OSCEncoder.h"
+#include <EthernetUDP2.h> // let them do the socket stuff.
 
 #define kDummyPortNumber 10000
 
@@ -29,14 +30,14 @@ class OSCClient{
 private:
         
 	uint8_t _sock;
-	
+	EthernetUDP _udp;
 
     uint8_t *_sendData;
     
     OSCEncoder encoder;
 
-    int16_t sockOpen(void);
-	void sockClose(void);
+ //    int16_t sockOpen(void);
+	// void sockClose(void);
 	
 	void flushSendData(void);
     

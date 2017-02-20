@@ -28,6 +28,7 @@ private:
     typedef void (*AdrFunc)(OSCMessage*);
     
     AdrFunc adrFunc[kMaxPatternMatch];
+    AdrFunc defaultAdrFunc;
     
 	char *addr[kMaxPatternMatch];
 
@@ -41,7 +42,7 @@ public:
 	void addOscAddress(char *_adr , AdrFunc _func );
     void execFunc(uint8_t _index,OSCMessage *_mes);
     
-    void paternComp(OSCMessage *_mes);
+    int paternComp(OSCMessage *_mes);
    
     friend class OSCServer;
 };
